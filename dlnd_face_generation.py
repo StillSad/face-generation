@@ -149,7 +149,7 @@ tests.test_model_inputs(model_inputs)
 # 
 # 该函数应返回形如 (tensor output of the discriminator, tensor logits of the discriminator) 的元组。
 
-# In[7]:
+# In[6]:
 
 
 def discriminator(images, reuse=False):
@@ -193,7 +193,7 @@ tests.test_discriminator(discriminator, tf)
 # 
 # 该函数应返回所生成的 28 x 28 x `out_channel_dim` 维度图像。
 
-# In[14]:
+# In[7]:
 
 
 def generator(z, out_channel_dim, is_train=True):
@@ -237,7 +237,7 @@ tests.test_generator(generator, tf)
 # - `discriminator(images, reuse=False)`
 # - `generator(z, out_channel_dim, is_train=True)`
 
-# In[15]:
+# In[8]:
 
 
 def model_loss(input_real, input_z, out_channel_dim):
@@ -274,7 +274,7 @@ tests.test_model_loss(model_loss)
 # ### 优化（Optimization）
 # 部署 `model_opt` 函数实现对 GANs 的优化。使用 [`tf.trainable_variables`](https://www.tensorflow.org/api_docs/python/tf/trainable_variables) 获取可训练的所有变量。通过变量空间名 `discriminator` 和 `generator` 来过滤变量。该函数应返回形如 (discriminator training operation, generator training operation) 的元组。
 
-# In[16]:
+# In[9]:
 
 
 def model_opt(d_loss, g_loss, learning_rate, beta1):
@@ -309,7 +309,7 @@ tests.test_model_opt(model_opt, tf)
 # ### 输出显示
 # 使用该函数可以显示生成器 (Generator) 在训练过程中的当前输出，这会帮你评估 GANs 模型的训练程度。
 
-# In[17]:
+# In[10]:
 
 
 """
@@ -349,7 +349,7 @@ def show_generator_output(sess, n_images, input_z, out_channel_dim, image_mode):
 # 
 # **注意**：在每个批次 (batch) 中运行 `show_generator_output` 函数会显著增加训练时间与该 notebook 的体积。推荐每 100 批次输出一次 `generator` 的输出。 
 
-# In[31]:
+# In[12]:
 
 
 def train(epoch_count, batch_size, z_dim, learning_rate, beta1, get_batches, data_shape, data_image_mode):
@@ -381,7 +381,7 @@ def train(epoch_count, batch_size, z_dim, learning_rate, beta1, get_batches, dat
                 
                 # TODO: Train Model
                 steps += 1
-         
+                batch_images = batch_images * 2
 
                 batch_z = np.random.uniform(-1, 1, size=(batch_size, z_dim))
             
@@ -399,10 +399,10 @@ def train(epoch_count, batch_size, z_dim, learning_rate, beta1, get_batches, dat
 # ### MNIST
 # 在 MNIST 上测试你的 GANs 模型。经过 2 次迭代，GANs 应该能够生成类似手写数字的图像。确保生成器 (generator) 低于辨别器 (discriminator) 的损失，或接近 0。
 
-# In[20]:
+# In[13]:
 
 
-batch_size = 128
+batch_size = 32
 z_dim = 100
 learning_rate = 0.0002
 beta1 = 0.5
@@ -422,10 +422,10 @@ with tf.Graph().as_default():
 # ### CelebA
 # 在 CelebA 上运行你的 GANs 模型。在一般的GPU上运行每次迭代大约需要 20 分钟。你可以运行整个迭代，或者当 GANs 开始产生真实人脸图像时停止它。
 
-# In[33]:
+# In[14]:
 
 
-batch_size = 128
+batch_size = 16
 z_dim = 100
 learning_rate = 0.0002
 beta1 = 0.5
